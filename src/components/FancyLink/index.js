@@ -1,11 +1,20 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import AwesomeLink from './AwesomeLink'
-import AnchorLink from './AnchorLink'
-import { isUrl } from '../../utils/utils'
-import styles from './styles.module.scss'
+import React from "react";
+import { Link } from "react-router-dom";
+import AwesomeLink from "./AwesomeLink";
+import AnchorLink from "./AnchorLink";
+import ButtonLink from "./ButtonLink";
+import { isUrl } from "../../utils/utils";
+import styles from "./styles.module.scss";
 
-function FancyLink({ label, name, title, children, to, activeOnlyWhenExact, ...props }) {
+function FancyLink({
+  label,
+  name,
+  title,
+  children,
+  to,
+  activeOnlyWhenExact,
+  ...props
+}) {
   if (isUrl(to)) {
     return (
       <AwesomeLink
@@ -17,21 +26,22 @@ function FancyLink({ label, name, title, children, to, activeOnlyWhenExact, ...p
         activeOnlyWhenExact={activeOnlyWhenExact}
         className={`${styles.basic} ${styles.external}`}
         to={{
-          pathname: '/redirect',
-          search: '?link=' + encodeURIComponent(to)
+          pathname: "/redirect",
+          search: "?link=" + encodeURIComponent(to),
         }}
       />
-    )
+    );
   }
 
   return (
     <Link className={styles.basic} to={to} title={title} {...props}>
       {label || name || children}
     </Link>
-  )
+  );
 }
 
-FancyLink.AwesomeLink = AwesomeLink
-FancyLink.AnchorLink = AnchorLink
+FancyLink.AwesomeLink = AwesomeLink;
+FancyLink.AnchorLink = AnchorLink;
+FancyLink.ButtonLink = ButtonLink;
 
-export default FancyLink
+export { FancyLink as default, AwesomeLink, AnchorLink, ButtonLink };

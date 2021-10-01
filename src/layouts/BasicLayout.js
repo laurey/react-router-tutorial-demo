@@ -16,6 +16,7 @@ import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
 import Counter from "../pages/Counter";
 import Secret from "../pages/Secret";
+import Todos from "../pages/Todos";
 import Exception from "../pages/Exception";
 import RedirectProxy from "../pages/RedirectProxy";
 
@@ -86,6 +87,7 @@ function BasicLayout(props) {
                   <Route path="/signin" component={SignIn} />
                   <Route path="/login" component={LogIn} />
                   <Route path="/demo" component={Demo} />
+                  <Route path="/todos" component={Todos} />
                   <Route path="/redirect" component={RedirectProxy} />
                   <Route path="/signout" component={LogOut} />
                   <Route

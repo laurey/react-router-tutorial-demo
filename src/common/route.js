@@ -23,6 +23,13 @@ const routes = [
     path: "/todos",
   },
   {
+    name: "NotFound",
+    component: FancyLink,
+    hideInMenu: false,
+    hideInSider: false,
+    path: "/not-found",
+  },
+  {
     name: "Counter",
     component: FancyLink,
     hideInMenu: false,
