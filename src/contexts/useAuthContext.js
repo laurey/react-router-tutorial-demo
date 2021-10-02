@@ -5,8 +5,9 @@ const AuthContext = React.createContext();
 
 export function AuthProvider(props) {
   const { children } = props;
-  const { user, logIn, logOut } = useAuth();
+  const { user, auth, logIn, logOut } = useAuth();
   const value = {
+    auth,
     currentUser: user,
     login: (param) => {
       return logIn(param);

@@ -20,7 +20,13 @@ export function useAuth() {
     });
   };
 
+  const { isAuthUser } = user || {};
+
   return {
+    auth: {
+      isAuthUser,
+      user,
+    },
     user,
     logIn,
     logOut,
