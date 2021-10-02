@@ -1,63 +1,29 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import PropTypes from 'prop-types'
-import { Link, useLocation } from 'react-router-dom'
-import { Menu } from 'antd'
-import defaultRoutes from '../common/route'
+import React, { useMemo } from "react";
+import PropTypes from "prop-types";
+import { Link, useLocation } from "react-router-dom";
+import { Menu } from "antd";
+import defaultRoutes from "../common/route";
 
 function TopHeader(props) {
-  const [visible, setVisible] = useState(true)
-  const { theme, isMobile, collapsed, layout: setting, menusData } = props
-  const { menuPos, fixedHeader, autoHideHeader, navHeight } = setting
+  const { theme, isMobile, collapsed, layout: setting, menusData } = props;
+  const { menuPosition, fixedHeader, navHeight } = setting;
+  const isTop = menuPosition === "top";
 
-  const isTop = menuPos === 'topmenu'
+  const { pathname } = useLocation();
 
   const width = useMemo(() => {
     if (isMobile || !fixedHeader || isTop) {
-      return '100%'
+      return "100%";
     }
 
-    return collapsed ? 'calc(100% - 80px)' : 'calc(100% - 230px)'
-  }, [isMobile, fixedHeader, isTop, collapsed])
-
-  const handleScroll = useCallback(() => {
-    if (!autoHideHeader) {
-      return
-    }
-
-    const scrollTop = document.body.scrollTop + document.documentElement.scrollTop
-    if (!this.ticking) {
-      this.ticking = true
-      requestAnimationFrame(() => {
-        if (this.oldScrollTop > scrollTop) {
-          setVisible(true)
-        } else if (scrollTop > 300 && visible) {
-          setVisible(false)
-        } else if (scrollTop < 300 && !visible) {
-          setVisible(true)
-        }
-
-        this.oldScrollTop = scrollTop
-        this.ticking = false
-      })
-    }
-  }, [autoHideHeader, visible])
-
-  const { pathname } = useLocation()
-
-  useEffect(() => {
-    document.addEventListener('scroll', handleScroll, { passive: true })
-    return () => {
-      document.removeEventListener('scroll', handleScroll)
-    }
-  }, [handleScroll])
+    return collapsed ? "calc(100% - 80px)" : "calc(100% - 230px)";
+  }, [isMobile, fixedHeader, isTop, collapsed]);
 
   return (
     <div
-      className={`rtc-layout-${theme || 'light'}-header ${
-        fixedHeader ? 'rtc-layout-fixed-header' : ''
-      }`}
+      className="rtc-top-header"
       style={{
-        width
+        width,
       }}
     >
       <Menu
@@ -73,24 +39,23 @@ function TopHeader(props) {
               <Menu.Item key={menu.path.pathname || menu.path}>
                 <Link to={menu.path}>{menu.name}</Link>
               </Menu.Item>
-            )
+            );
           })}
       </Menu>
     </div>
-  )
+  );
 }
 
 TopHeader.propTypes = {
   theme: PropTypes.string,
-  menusData: PropTypes.array
-}
+  menusData: PropTypes.array,
+};
 
 TopHeader.defaultProps = {
-  theme: 'dark',
+  theme: "dark",
   isMobile: false,
   collapsed: false,
-  // menusData: []
-  menusData: defaultRoutes
-}
+  menusData: defaultRoutes,
+};
 
-export default TopHeader
+export default TopHeader;

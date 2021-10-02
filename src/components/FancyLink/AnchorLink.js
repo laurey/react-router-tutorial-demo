@@ -1,11 +1,14 @@
-import React from 'react'
+import React from "react";
 
-const AnchorLink = React.forwardRef(({ name, title, label, children, href }, ref) => {
+const AnchorLink = ({ name, title, label, children, href, ...props }) => {
   return (
-    <a href={href} ref={ref} title={title}>
-      🍖 {label || name || children}
+    <a {...props} href={href} title={title}>
+      <span aria-label="foods-drink-foo" role="img">
+        🍖🍺🏆✈️⚽️
+      </span>
+      {label || name || children}
     </a>
-  )
-})
+  );
+};
 
-export default AnchorLink
+export default AnchorLink;

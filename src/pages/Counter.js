@@ -1,3 +1,13 @@
 import { Counter } from "../containers/Counter";
+import Timer from "../components/Timer";
 
-export default Counter;
+function CounterPage() {
+  return (
+    <div>
+      <Counter />
+      <Timer value={100} />
+    </div>
+  );
+}
+
+export default CounterPage;

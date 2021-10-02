@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Prompt, useHistory } from "react-router";
 import { Icon, Modal } from "antd";
-// import useAuthContext from "../hooks/useAuth";
+import useAuthContext from "../contexts/useAuthContext";
 import SignInForm from "../components/SignIn";
 import { getPageQuery } from "../utils/utils";
-import useAuthContext from "../contexts/useAuthContext";
 
 export const SignIn = () => {
   const history = useHistory();
@@ -85,9 +84,18 @@ export const SignIn = () => {
           visible={confirmVisible}
           onCancel={handleHidePromptModal}
           onOk={handleAllowPromptTransition}
+          okText="确定"
+          cancelText="取消"
         >
-          <Icon type="exclamation-circle" className="rtc-warning-icon" />
-          确定要离开当前页面吗?
+          <div>
+            <Icon
+              type="exclamation-circle"
+              className="rtc-warning-icon"
+              theme="filled"
+              style={{ padding: "0 10px", fontSize: 24, color: "red" }}
+            />
+            <span>确定要离开当前页面吗?</span>
+          </div>
         </Modal>
       )}
 
