@@ -20,6 +20,13 @@ export const decrementBy = (factor) => ({
 });
 
 export const asyncIncrement = () => (dispatch) => {
+  // return new Promise((resolve, reject) => {
+  //   setTimeout(() => {
+  //     resolve();
+  //   }, 1000);
+  // }).then(() => {
+  //   dispatch(increment());
+  // });
   setTimeout(() => {
     dispatch(increment());
   }, 1000);
