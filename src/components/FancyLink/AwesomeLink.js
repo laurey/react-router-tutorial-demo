@@ -1,22 +1,31 @@
-import React from 'react'
-import { Link, useRouteMatch } from 'react-router-dom'
+import React from "react";
+import { Link, useRouteMatch } from "react-router-dom";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
-function AwesomeLink({ label, name, to, title, target, className, activeOnlyWhenExact }) {
+function AwesomeLink({
+  label,
+  name,
+  to,
+  title,
+  target,
+  children,
+  className,
+  activeOnlyWhenExact,
+}) {
   const match = useRouteMatch({
     path: to,
-    exact: activeOnlyWhenExact
-  })
+    exact: activeOnlyWhenExact,
+  });
 
   return (
-    <div className={match ? styles.active : ''}>
-      {match && '> '}
+    <div className={match ? styles.active : ""}>
+      {match && "> "}
       <Link to={to} target={target} className={className} title={title}>
-        {label || name}
+        {label || name || children}
       </Link>
     </div>
-  )
+  );
 }
 
-export default AwesomeLink
+export default AwesomeLink;
