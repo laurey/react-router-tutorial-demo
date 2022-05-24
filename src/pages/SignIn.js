@@ -1,18 +1,29 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Prompt, useHistory } from "react-router";
-import { Icon, Modal } from "antd";
+import { Icon, Modal, Button } from "antd";
 import useAuthContext from "../contexts/useAuthContext";
 import SignInForm from "../components/SignIn";
 import { getPageQuery } from "../utils/utils";
+import useUnsavedChangesWarning from "../hooks/useUnsavedChangesWarning";
 
 export const SignIn = () => {
   const history = useHistory();
   const auth = useAuthContext();
-  const [target, setTarget] = useState("/");
   const [values, setValues] = useState(null);
-  const [isBlocking, setIsBlocking] = useState(false);
-  const [forceRedirect, setForceRedirect] = useState(false);
-  const [confirmVisible, setConfirmVisible] = useState(false);
+  // const [target, setTarget] = useState("/");
+  // const [isBlocking, setIsBlocking] = useState(false);
+  // const [forceRedirect, setForceRedirect] = useState(false);
+  // const [confirmVisible, setConfirmVisible] = useState(false);
+  const {
+    target,
+    isBlocking,
+    forceRedirect,
+    confirmVisible,
+    setIsBlocking,
+    handleHidePromptModal,
+    handleAllowPromptTransition,
+    handlePromptModalVisibility,
+  } = useUnsavedChangesWarning();
 
   const handleSubmit = useCallback(
     (values) => {
@@ -24,35 +35,33 @@ export const SignIn = () => {
         })
         .catch(console.error);
     },
-    [auth]
+    [auth, setIsBlocking]
   );
 
-  const handleValuesChanged = useCallback((values = "") => {
-    setIsBlocking(!!values);
-  }, []);
+  const handleValuesChanged = useCallback(
+    (values = "") => {
+      setIsBlocking(!!values);
+    },
+    [setIsBlocking]
+  );
 
-  const handlePromptModalVisibility = useCallback((location) => {
-    setTarget(location);
-    setConfirmVisible(true);
-  }, []);
+  // const handlePromptModalVisibility = useCallback((location) => {
+  //   setTarget(location);
+  //   setConfirmVisible(true);
+  // }, []);
 
-  const handleAllowPromptTransition = useCallback(() => {
-    setIsBlocking(false);
-    setForceRedirect(true);
-  }, []);
+  // const handleAllowPromptTransition = useCallback(() => {
+  //   setIsBlocking(false);
+  //   setForceRedirect(true);
+  // }, []);
 
-  const handleHidePromptModal = useCallback(() => {
-    setConfirmVisible(false);
-  }, []);
+  // const handleHidePromptModal = useCallback(() => {
+  //   setConfirmVisible(false);
+  // }, []);
 
   const dd = getPageQuery();
-  console.log(dd);
 
   useEffect(() => {
-    if (!isBlocking) {
-      setConfirmVisible(false);
-    }
-
     if (forceRedirect && target) {
       history.push(
         {
@@ -67,6 +76,7 @@ export const SignIn = () => {
     <>
       {isBlocking && (
         <Prompt
+          when={isBlocking}
           message={(location) => {
             handlePromptModalVisibility(location);
             return false;
@@ -74,7 +84,10 @@ export const SignIn = () => {
         />
       )}
       <p>
-        Blocking? {isBlocking ? "Yes, click a link or the back button" : "Nope"}
+        <span>Is Blocking?</span>
+        <span>
+          {isBlocking ? "Yes, click a link or the back button" : "Nope"}
+        </span>
       </p>
       <p>pageQuery: {JSON.stringify(dd)}</p>
       {confirmVisible && (
@@ -100,6 +113,14 @@ export const SignIn = () => {
       )}
 
       {values && <p>submit values: {JSON.stringify(values)}</p>}
+      <div>
+        <Button href="https://www.google.com" type="link" target="_blank">
+          Giigle
+        </Button>
+        <Button href="https://www.youtube.com" type="link">
+          Utube
+        </Button>
+      </div>
 
       <SignInForm
         onSubmit={handleSubmit}

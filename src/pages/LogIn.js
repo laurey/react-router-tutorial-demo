@@ -6,7 +6,7 @@ import React, {
   useState,
   useImperativeHandle,
 } from "react";
-import { Prompt, useHistory } from "react-router";
+import { Prompt, useHistory } from "react-router-dom";
 import { Form, Modal } from "antd";
 import { LogInForm } from "../components/SignIn";
 
