@@ -20,7 +20,12 @@ export function AuthProvider(props) {
 }
 
 function useAuthContext() {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (typeof context === "undefined") {
+    throw new Error("useAuthContext must be used within an AuthProvider");
+  }
+
+  return context;
 }
 
 export default useAuthContext;

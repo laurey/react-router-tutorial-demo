@@ -27,7 +27,14 @@ export function BasicLayoutProvider(props) {
 }
 
 function useBasicLayoutContext() {
-  return useContext(BasicLayoutContext);
+  const context = useContext(BasicLayoutContext);
+  if (typeof context === "undefined") {
+    throw new Error(
+      "useBasicLayoutContext must be used within an BasicLayoutProvider"
+    );
+  }
+
+  return context;
 }
 
 export default useBasicLayoutContext;

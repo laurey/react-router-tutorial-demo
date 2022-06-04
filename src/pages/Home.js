@@ -46,6 +46,7 @@ function Home(props) {
     <div>
       <h1>Home Page</h1>
       <p>{props.location ? "has location prop" : "no location prop"}</p>
+      <p>pathname: {props.location?.pathname ?? "has no location pathname"}</p>
       <div className="rtc-page-header-wrapper-header">
         <Card style={{ marginBottom: 10 }} bordered={false}>
           <ul style={{ marginTop: 20 }}>

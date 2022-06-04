@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Prompt, useHistory } from "react-router";
+import { Prompt, useHistory } from "react-router-dom";
 import { Icon, Modal, Button } from "antd";
 import useAuthContext from "../contexts/useAuthContext";
 import SignInForm from "../components/SignIn";

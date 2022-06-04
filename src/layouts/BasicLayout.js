@@ -14,9 +14,7 @@ import LogIn from "../pages/LogIn";
 import LogOut from "../pages/LogOut";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
-import Counter from "../pages/Counter";
 import Secret from "../pages/Secret";
-import Todos from "../pages/Todos";
 import Exception from "../pages/Exception";
 import RedirectProxy from "../pages/RedirectProxy";
 
@@ -68,10 +66,10 @@ function BasicLayout(props) {
               extra={
                 <div>
                   <Radio.Group defaultValue="a" buttonStyle="outline">
-                    <Radio.Button value="b">Shanghai</Radio.Button>
-                    <Radio.Button value="c">Beijing</Radio.Button>
-                    <Radio.Button value="a">Hangzhou</Radio.Button>
-                    <Radio.Button value="d">Chengdu</Radio.Button>
+                    <Radio.Button value="b">TaiPei</Radio.Button>
+                    <Radio.Button value="a">Tokyo</Radio.Button>
+                    <Radio.Button value="d">Paris</Radio.Button>
+                    <Radio.Button value="c">Berlin</Radio.Button>
                   </Radio.Group>
                 </div>
               }
@@ -82,12 +80,10 @@ function BasicLayout(props) {
                     <Home />
                   </Route>
                   <Route path="/home" render={(props) => <Home {...props} />} />
-                  <Route path="/counter" component={Counter} />
                   <Route path="/signup" component={SignUp} />
                   <Route path="/signin" component={SignIn} />
                   <Route path="/login" component={LogIn} />
                   <Route path="/demo" component={Demo} />
-                  <Route path="/todos" component={Todos} />
                   <Route path="/redirect" component={RedirectProxy} />
                   <Route path="/signout" component={LogOut} />
                   <Route
