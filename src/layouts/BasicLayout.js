@@ -1,27 +1,16 @@
 import React, { useCallback, useState } from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
 import classNames from "classnames";
 import { Card, Layout, Radio } from "antd";
 
 import useBasicLayoutContext from "../contexts/useBasicLayoutContext";
-import PrivateRoute from "../components/PrivateRoute";
-import NotFound from "../components/NotFound";
-import FooterLayout from "./FooterLayout";
-import Header from "./HeaderLayout";
-import Demo from "../pages/Demo";
-import Home from "../pages/Home";
-import LogIn from "../pages/LogIn";
-import LogOut from "../pages/LogOut";
-import SignIn from "../pages/SignIn";
-import SignUp from "../pages/SignUp";
-import Secret from "../pages/Secret";
-import Exception from "../pages/Exception";
-import RedirectProxy from "../pages/RedirectProxy";
-
-import styles from "./styles.scss";
+import Footer from "./Footer";
+import HeaderLayout from "./Header";
+import renderRoutes from "../config/renderRoutes";
+import routes from "../config/router.config";
 import logo from "../assets/logo.png";
+import styles from "./styles.less";
 
-const HeaderLayout = React.memo(Header);
+const Header = React.memo(HeaderLayout);
 
 const { Content } = Layout;
 
@@ -38,9 +27,11 @@ function BasicLayout(props) {
     setCollapsed((state) => !state);
   }, [setCollapsed]);
 
+  console.log("aaa111");
+
   return (
     <Layout className="rtc-layout rtc-basic-layout">
-      <HeaderLayout
+      <Header
         logo={logo}
         layout={layout}
         theme={navTheme}
@@ -66,7 +57,6 @@ function BasicLayout(props) {
               extra={
                 <div>
                   <Radio.Group defaultValue="a" buttonStyle="outline">
-                    <Radio.Button value="b">TaiPei</Radio.Button>
                     <Radio.Button value="a">Tokyo</Radio.Button>
                     <Radio.Button value="d">Paris</Radio.Button>
                     <Radio.Button value="c">Berlin</Radio.Button>
@@ -74,42 +64,12 @@ function BasicLayout(props) {
                 </div>
               }
             >
-              <div>
-                <Switch>
-                  <Route exact path="/">
-                    <Home />
-                  </Route>
-                  <Route path="/home" render={(props) => <Home {...props} />} />
-                  <Route path="/signup" component={SignUp} />
-                  <Route path="/signin" component={SignIn} />
-                  <Route path="/login" component={LogIn} />
-                  <Route path="/demo" component={Demo} />
-                  <Route path="/redirect" component={RedirectProxy} />
-                  <Route path="/signout" component={LogOut} />
-                  <Route
-                    path="/logout"
-                    children={({ location, ...rest }) => (
-                      <Redirect
-                        {...rest}
-                        to={{
-                          pathname: "/signout",
-                          state: location.state,
-                          search: location.search,
-                        }}
-                      />
-                    )}
-                  />
-                  <Route path="/exception/:type?" component={Exception} />
-                  <PrivateRoute path="/secret" component={Secret} />
-                  <Redirect from="/join" to="/signup" />
-                  <Route children={<NotFound />} />
-                </Switch>
-              </div>
+              {/* {renderRoutes(routes)} */}
             </Card>
           </div>
         </Content>
       </Layout>
-      <FooterLayout>Footer ©2021</FooterLayout>
+      <Footer>Footer ©2021</Footer>
     </Layout>
   );
 }
