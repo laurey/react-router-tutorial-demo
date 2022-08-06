@@ -2,13 +2,12 @@ import _ from "lodash";
 import slash from "slash2";
 import { isAbsolute } from "path";
 
-import NotFound from "common/src/components/NotFound";
-
+import NotFound from "../NotFound";
 import getRouteConfig from "./getRouteConfig";
 
-function modifyRoutes(args) {
+function modifyRoutes(paths, args) {
   const notFoundRoute = {
-    component: NotFound,
+    component: (props) => <NotFound {...props} pagesPath={paths.pagesPath} />,
   };
 
   const routes = _.cloneDeep(args);
@@ -30,7 +29,7 @@ function modifyRoutes(args) {
 
 function fetchRoutes(paths, config, onPatchRoute) {
   const routes = getRouteConfig(paths, config, onPatchRoute);
-  return modifyRoutes(routes);
+  return modifyRoutes(paths, routes);
 }
 
 function getRoutes(paths, config, onPatchRoute) {
@@ -39,7 +38,7 @@ function getRoutes(paths, config, onPatchRoute) {
 
 function getComponents(config, routes) {
   return routes.reduce((aac, route) => {
-    if (_.isString(route.component) && !route.component.startsWith("()")) {
+    if (_.isString(route.component) && !route.component.startsWith("() =>")) {
       const component = isAbsolute(route.component)
         ? route.component
         : require.resolve(_.join(config.cwd, route.component));

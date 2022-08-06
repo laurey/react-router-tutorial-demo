@@ -1,16 +1,17 @@
-import Loadable from "react-loadable";
+// import Loadable from "react-loadable";
 
-import Loading from "../components/Loading";
+// import Loading from "../components/Loading";
 
 const routes = [
   {
     path: "/demo",
-    // component: "../layouts/DemoLayout",
-    component: Loadable({
-      loader: () => import("../layouts/DemoLayout"),
-      loading: Loading,
-    }),
-    // Routes: ["src/pages/Authorized"],
+    icon: "apple",
+    component: "../layouts/DemoLayout",
+    // component: Loadable({
+    //   loader: () => import("../layouts/DemoLayout"),
+    //   loading: Loading,
+    // }),
+    Routes: ["src/pages/Authorized"],
     // Routes: [
     //   Loadable({
     //     loader: () => import("../pages/Authorized"),
@@ -21,122 +22,164 @@ const routes = [
       { path: "/demo", redirect: "/demo/workplace" },
       {
         name: "DemoWorkplace",
-        icon: "application",
+        icon: "chrome",
         path: "/demo/workplace",
-        // component: "./Demo/Workplace",
-        component: Loadable({
-          loader: () => import("../pages/Demo/Workplace"),
-          loading: Loading,
-        }),
+        component: "./Demo/Workplace",
+        // component: Loadable({
+        //   loader: () => import("../pages/Demo/Workplace"),
+        //   loading: Loading,
+        // }),
       },
       {
         name: "DemoView",
-        icon: "application",
+        icon: "slack",
         path: "/demo/viewlist",
-        // component: "./Demo/ViewList",
-        component: Loadable({
-          loader: () => import("../pages/Demo/ViewList"),
-          loading: Loading,
-        }),
+        component: "./Demo/ViewList",
+        // component: Loadable({
+        //   loader: () => import("../pages/Demo/ViewList"),
+        //   loading: Loading,
+        // }),
       },
       {
-        // component: "404",
-        component: Loadable({
-          loader: () => import("../components/Exception"),
-          render(loaded, props) {
-            let Component = loaded.namedExport;
-            return (
-              <Component type="404" {...props}>
-                <div>loadable: 404 not found!!!</div>
-              </Component>
-            );
-          },
-          loading: Loading,
-        }),
+        component: "404",
+        // component: Loadable({
+        //   loader: () => import("../components/Exception"),
+        //   render(loaded, props) {
+        //     let Component = loaded.namedExport;
+        //     return (
+        //       <Component type="404" {...props}>
+        //         <div>loadable: 404 not found!!!</div>
+        //       </Component>
+        //     );
+        //   },
+        //   loading: Loading,
+        // }),
       },
     ],
   },
+  // path: /
   {
     path: "/",
-    // component: "../layouts/BasicLayout",
-    component: Loadable({
-      loader: () => import("../layouts/BasicLayout"),
-      loading: Loading,
-    }),
+    component: "../layouts/BasicLayout",
+    // component: Loadable({
+    //   loader: () => import("../layouts/BasicLayout"),
+    //   loading: Loading,
+    // }),
     routes: [
-      { path: "/", redirect: "/dashboard" },
+      // { path: "/", redirect: "/demo" },
+      // { path: "/", redirect: "/dashboard" },
+      {
+        name: "Home",
+        icon: "bank",
+        path: "/",
+        component: "./Home",
+        // component: Loadable({
+        //   loader: () => import("../pages/Home"),
+        //   loading: Loading,
+        // }),
+        routes: [
+          {
+            path: "/home-dash-analysis",
+            name: "analysis",
+            component: "./Dashboard/Analysis",
+            // component: Loadable({
+            //   loader: () => import("../pages/Dashboard/Analysis"),
+            //   loading: Loading,
+            // }),
+          },
+          {
+            path: "/home-dash-center",
+            name: "center",
+            icon: "setting",
+            hideInMenu: true,
+            component: "./Dashboard/Center",
+            // component: Loadable({
+            //   loader: () => import("../pages/Dashboard/Center"),
+            //   loading: Loading,
+            // }),
+          },
+        ],
+      },
+      // path: /dashboard
       {
         name: "Dashboard",
         icon: "google",
         path: "/dashboard",
-        component: Loadable({
-          loader: () => import("../pages/Dashboard"),
-          loading: Loading,
-        }),
+        component: "./Dashboard",
+        // component: Loadable({
+        //   loader: () => import("../pages/Dashboard"),
+        //   loading: Loading,
+        // }),
         routes: [
           {
             path: "/dashboard/analysis",
             name: "analysis",
-            // component: "./Dashboard/Analysis",
-            component: Loadable({
-              loader: () => import("../pages/Dashboard/Analysis"),
-              loading: Loading,
-            }),
+            component: "./Dashboard/Analysis",
+            // component: Loadable({
+            //   loader: () => import("../pages/Dashboard/Analysis"),
+            //   loading: Loading,
+            // }),
           },
           {
             path: "/dashboard/center",
             name: "center",
+            icon: "setting",
             hideInMenu: true,
-            // component: "./Dashboard/Center",
-            component: Loadable({
-              loader: () => import("../pages/Dashboard/Center"),
-              loading: Loading,
-            }),
+            component: "./Dashboard/Center",
+            // component: Loadable({
+            //   loader: () => import("../pages/Dashboard/Center"),
+            //   loading: Loading,
+            // }),
           },
         ],
       },
+      // path: /montiro
       {
         name: "Monitor",
         icon: "twitter",
         path: "/monitor",
-        component: Loadable({
-          loader: () => import("../pages/Monitor"),
-          loading: Loading,
-        }),
+        component: "./Monitor",
+        // component: Loadable({
+        //   loader: () => import("../pages/Monitor"),
+        //   loading: Loading,
+        // }),
         hideChildrenInMenu: true,
         routes: [
           {
             path: "/monitor/aa",
             name: "ma",
-            component: Loadable({
-              loader: () => import("../pages/Monitor/AA"),
-              loading: Loading,
-            }),
+            icon: "youtube",
+            component: "./Monitor/AA",
+            // component: Loadable({
+            //   loader: () => import("../pages/Monitor/AA"),
+            //   loading: Loading,
+            // }),
           },
           {
             path: "/monitor/bb",
             name: "mb",
-            component: Loadable({
-              loader: () => import("../pages/Monitor/BB"),
-              loading: Loading,
-            }),
+            component: "./Monitor/BB",
+            // component: Loadable({
+            //   loader: () => import("../pages/Monitor/BB"),
+            //   loading: Loading,
+            // }),
           },
         ],
       },
       {
-        // component: "404",
-        component: Loadable({
-          loader: () => import("../components/Exception"),
-          render(loaded, props) {
-            let Component = loaded.namedExport;
-            return (
-              <Component type="404" {...props}>
-                <div>another loadable: 404 not found!!!</div>
-              </Component>
-            );
-          },
-          loading: Loading,
-        }),
+        component: "404",
+        // component: Loadable({
+        //   loader: () => import("../components/Exception"),
+        //   render(loaded, props) {
+        //     let Component = loaded.namedExport;
+        //     return (
+        //       <Component type="404" {...props}>
+        //         <div>another loadable: 404 not found!!!</div>
+        //       </Component>
+        //     );
+        //   },
+        //   loading: Loading,
+        // }),
       },
     ],
   },
