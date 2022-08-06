@@ -1,13 +1,13 @@
 import { relative, isAbsolute, join } from "path";
 import slash from "slash2";
 import _ from "lodash";
-// import Loadable from "react-loadable";
 import loadable from "@loadable/component";
+// import About from "../../pages/About";
 import Loading from "../../components/Loading";
 
-const OtherComponent = loadable(() => import("../../containers/Demo"), {
-  fallback: <div>Loading...</div>,
-});
+// const OtherComponent = loadable(() => import("../../containers/Demo"), {
+//   fallback: Loading,
+// });
 
 // let targetLevel = null;
 // let level = 0;
@@ -53,23 +53,23 @@ function patchRoute(paths, route) {
   ) {
     const importPath = isAbsolute(route.component)
       ? route.component
-      : join("../../", route.component);
+      : slash(join("../../", relative(paths.absSrcPath, route.component)));
     // console.log(JSON.stringify(paths));
-    console.log(
-      "imath(route.component) => ",
-      process.cwd(),
-      importPath,
-      route.component
-    );
-    import(`./../../${route.component}`).then((module) => {
-      console.log("ddddd");
-      console.log(module);
-    });
+    // console.log("ima => ", importPath, route.component);
+    // import(importPath).then((module) => {
+    //   console.log("aaaa");
+    //   console.log(module);
+    // });
+    // import("../../pages/About").then((module) => {
+    //   console.log("bbbbb");
+    //   console.log(module.default);
+    // });
+
     Object.assign(route, {
-      ll: Loading,
-      oo: OtherComponent,
+      // component: About,
+      // component: OtherComponent,
       // component: loadable(() => import(importPath)),
-      component: loadable(() => import(slash(importPath)), {
+      component: loadable(() => import(importPath), {
         fallback: Loading,
       }),
     });

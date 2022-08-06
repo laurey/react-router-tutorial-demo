@@ -7,12 +7,7 @@ import "./App.css";
 function App(props) {
   return (
     <BasicLayoutProvider>
-      <AuthProvider>
-        <div>
-          <h1>hahhaa</h1>
-          {props.children}
-        </div>
-      </AuthProvider>
+      <AuthProvider>{props.children}</AuthProvider>
     </BasicLayoutProvider>
   );
 }

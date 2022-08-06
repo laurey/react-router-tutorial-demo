@@ -4,7 +4,7 @@ import { isAbsolute } from "path";
 
 import NotFound from "../NotFound";
 import getRouteConfig from "./getRouteConfig";
-import routesToJSON from "./routesToJSON";
+// import routesToJSON from "./routesToJSON";
 
 function modifyRoutes(paths, args) {
   const notFoundRoute = {
@@ -35,7 +35,8 @@ function fetchRoutes(paths, config, onPatchRoute) {
 
 function getRoutes(paths, config, onPatchRoute) {
   const routes = fetchRoutes(paths, config, onPatchRoute);
-  return routesToJSON(paths, routes);
+  // return routesToJSON(paths, routes);
+  return routes;
 }
 
 function getComponents(config, routes) {

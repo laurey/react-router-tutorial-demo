@@ -5,8 +5,6 @@ import { Card, Layout, Radio } from "antd";
 import useBasicLayoutContext from "../contexts/useBasicLayoutContext";
 import Footer from "./Footer";
 import HeaderLayout from "./Header";
-// import renderRoutes from "../config/renderRoutes";
-// import routes from "../config/router.config";
 import logo from "../assets/logo.png";
 import styles from "./styles.less";
 

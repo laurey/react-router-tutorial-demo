@@ -1,16 +1,13 @@
-import React, { PureComponent, Suspense } from 'react';
-import { Layout, Icon } from 'antd';
-import classNames from 'classnames';
-import Link from 'umi/link';
-import PageLoading from '../PageLoading';
-import { getDefaultCollapsedSubMenus, isMainMenu } from './SiderMenuUtils';
-import { title } from '@/defaultSettings';
-import styles from './index.less';
+import React, { PureComponent, Suspense } from "react";
+import { Icon, Layout } from "antd";
+import classNames from "classnames";
+import { Link } from "react-router-dom";
+import PageLoading from "../Loading";
+import { getDefaultCollapsedSubMenus } from "./SiderMenuUtils";
+import styles from "./index.less";
 
-const BaseMenu = React.lazy(() => import('./BaseMenu'));
+const BaseMenu = React.lazy(() => import("./BaseMenu"));
 const { Sider } = Layout;
-
-let firstMount = true;
 
 export default class SiderMenu extends PureComponent {
   constructor(props) {
@@ -20,56 +17,64 @@ export default class SiderMenu extends PureComponent {
     };
   }
 
-  componentDidMount() {
-    firstMount = false;
-  }
-
-  componentDidUpdate(prevProps) {
-    const { location } = this.props;
-    if (prevProps.location.pathname !== location.pathname) {
-      this.setState({
-        openKeys: getDefaultCollapsedSubMenus(this.props),
-      });
+  static getDerivedStateFromProps(props, state) {
+    const { pathname } = state;
+    if (props.location.pathname !== pathname) {
+      return {
+        pathname: props.location.pathname,
+        openKeys: getDefaultCollapsedSubMenus(props),
+      };
     }
+    return null;
   }
 
-  handleOpenChange = openKeys => {
+  isMainMenu = (key) => {
     const { menuData } = this.props;
-    const moreThanOne = openKeys.filter(openKey => isMainMenu(menuData, openKey)).length > 1;
+    return menuData.some((item) => {
+      if (key) {
+        return item.key === key || item.path === key;
+      }
+      return false;
+    });
+  };
+
+  handleOpenChange = (openKeys) => {
+    const moreThanOne =
+      openKeys.filter((openKey) => this.isMainMenu(openKey)).length > 1;
     this.setState({
       openKeys: moreThanOne ? [openKeys.pop()] : [...openKeys],
     });
   };
 
   render() {
-    const { logo, collapsed, onCollapse, fixSiderbar, theme, isMobile } = this.props;
+    const { logo, isMobile, collapsed, onCollapse, fixSiderbar, theme } =
+      this.props;
     const { openKeys } = this.state;
     const defaultProps = collapsed ? {} : { openKeys };
-    const siderClassName = classNames(styles.sider, {
-      [styles.fixSiderBar]: fixSiderbar,
-      [styles.light]: theme === 'light',
-    });
 
+    const siderClassName = classNames(styles.sider, {
+      [styles.fixSiderbar]: fixSiderbar,
+      [styles.light]: theme === "light",
+    });
     return (
       <Sider
         collapsible
-        breakpoint="lg"
+        trigger={
+          isMobile ? null : (
+            <Icon type={collapsed ? "menu-unfold" : "menu-fold"} />
+          )
+        }
         collapsed={collapsed}
-        trigger={isMobile ? null : <Icon type={collapsed ? 'menu-unfold' : 'menu-fold'} />}
-        onCollapse={collapse => {
-          if (firstMount || !isMobile) {
-            onCollapse(collapse);
-          }
-        }}
-        width={220}
+        // breakpoint="lg"
+        onCollapse={onCollapse}
+        width={180}
         theme={theme}
-        collapsedWidth={65}
         className={siderClassName}
       >
         <div className={styles.logo} id="logo">
           <Link to="/">
             <img src={logo} alt="logo" />
-            <h1>{title}</h1>
+            <h1>Ant Design Pro</h1>
           </Link>
         </div>
         <Suspense fallback={<PageLoading />}>
@@ -78,7 +83,7 @@ export default class SiderMenu extends PureComponent {
             mode="inline"
             handleOpenChange={this.handleOpenChange}
             onOpenChange={this.handleOpenChange}
-            style={{ padding: '16px 0', width: '100%' }}
+            style={{ padding: "16px 0", width: "100%" }}
             {...defaultProps}
           />
         </Suspense>

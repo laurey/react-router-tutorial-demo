@@ -1,34 +1,25 @@
-import React, { PureComponent } from 'react';
-import classNames from 'classnames';
-import { Menu, Icon } from 'antd';
-import Link from 'umi/link';
-import IconFont from '@/components/IconFont';
-import { urlToList } from '../_utils/pathTools';
-import { getMenuMatches, isMainMenu, getFlatMenuKeys } from './SiderMenuUtils';
-import { isUrl } from '@/utils/utils';
-import styles from './index.less';
+import React, { PureComponent } from "react";
+import { Link } from "react-router-dom";
+import classNames from "classnames";
+import { Menu, Icon } from "antd";
+import { urlToList } from "../_utils/pathTools";
+import { getMenuMatches } from "./SiderMenuUtils";
+import { isUrl } from "../../utils/utils";
+import styles from "./index.less";
 
 const { SubMenu } = Menu;
 
-const getIcon = icon => {
-  if (typeof icon === 'string') {
-    if (isUrl(icon)) {
-      return (
-        <Icon
-          component={() => (
-            <img src={icon} alt="icon" className={classNames(styles.icon, 'sider-menu-item-img')} />
-          )}
-        />
-      );
-    }
-
-    if (icon.startsWith('icon-')) {
-      return <IconFont type={icon} />;
-    }
-
+// Allow menu.js config icon as string or ReactNode
+//   icon: 'setting',
+//   icon: 'http://demo.com/icon.png',
+//   icon: <Icon type="setting" />,
+const getIcon = (icon) => {
+  if (typeof icon === "string" && isUrl(icon)) {
+    return <img src={icon} alt="icon" className={styles.icon} />;
+  }
+  if (typeof icon === "string") {
     return <Icon type={icon} />;
   }
-
   return icon;
 };
 
@@ -37,74 +28,49 @@ export default class BaseMenu extends PureComponent {
    * 获得菜单子节点
    * @memberof SiderMenu
    */
-  getNavMenuItems = menusData => {
+  getNavMenuItems = (menusData, parent) => {
     if (!menusData) {
       return [];
     }
-
     return menusData
-      .filter(item => item.name && !item.hideInMenu)
-      .map(item => this.getSubMenuOrItem(item))
-      .filter(item => item);
+      .filter((item) => item.name && !item.hideInMenu)
+      .map((item) => this.getSubMenuOrItem(item, parent))
+      .filter((item) => item);
   };
 
   // Get the currently selected menu
-  getSelectedMenuKeys = pathname => {
-    const { flatMenuKeys, menuData } = this.props;
-    return urlToList(pathname)
-      .map(itemPath => getMenuMatches(flatMenuKeys, itemPath).pop())
-      .map(item => {
-        if (!item || isMainMenu(menuData, item)) {
-          return item;
-        }
-
-        let menu;
-
-        for (const menuItem of menuData) {
-          menu = menuItem.children.find(minorMenu => {
-            return (
-              (minorMenu && getMenuMatches(getFlatMenuKeys([minorMenu]), item)[0]) ||
-              (minorMenu.children && getMenuMatches(getFlatMenuKeys(minorMenu.children), item)[0])
-            );
-          });
-          if (menu) {
-            break;
-          }
-        }
-
-        if (!menu) {
-          return menu;
-        }
-
-        const path = menu.key || menu.path;
-        if (isMainMenu(menuData, path)) {
-          return item;
-        }
-
-        return path;
-      })
-      .filter(item => item);
-  };
-
-  getSubMenuTitle = item => {
-    const icon = getIcon(item.icon);
-    const { name } = item;
-    return (
-      <a>
-        {icon}
-        <span>{name}</span>
-      </a>
+  getSelectedMenuKeys = (pathname) => {
+    const { flatMenuKeys } = this.props;
+    return urlToList(pathname).map((itemPath) =>
+      getMenuMatches(flatMenuKeys, itemPath).pop()
     );
   };
 
   /**
    * get SubMenu or Item
    */
-  getSubMenuOrItem = item => {
+  getSubMenuOrItem = (item) => {
     // doc: add hideChildrenInMenu
-    if (item.children && !item.hideChildrenInMenu && item.children.some(child => child.name)) {
+    if (
+      item.children &&
+      !item.hideChildrenInMenu &&
+      item.children.some((child) => child.name)
+    ) {
+      const { name } = item;
       return (
-        <SubMenu title={this.getSubMenuTitle(item)} key={item.path}>
+        <SubMenu
+          title={
+            item.icon ? (
+              <span>
+                {getIcon(item.icon)}
+                <span>{name}</span>
+              </span>
+            ) : (
+              name
+            )
+          }
+          key={item.path}
+        >
           {this.getNavMenuItems(item.children)}
         </SubMenu>
       );
@@ -117,7 +83,7 @@ export default class BaseMenu extends PureComponent {
    * Judge whether it is http link.return a or Link
    * @memberof SiderMenu
    */
-  getMenuItemPath = item => {
+  getMenuItemPath = (item) => {
     const { name } = item;
     const itemPath = this.conversionPath(item.path);
     const icon = getIcon(item.icon);
@@ -131,7 +97,6 @@ export default class BaseMenu extends PureComponent {
         </a>
       );
     }
-
     const { location, isMobile, onCollapse } = this.props;
     return (
       <Link
@@ -152,37 +117,36 @@ export default class BaseMenu extends PureComponent {
     );
   };
 
-  conversionPath = path => {
-    if (path && path.indexOf('http') === 0) {
+  conversionPath = (path) => {
+    if (path && path.indexOf("http") === 0) {
       return path;
     }
-    return `/${path || ''}`.replace(/\/+/g, '/');
+    return `/${path || ""}`.replace(/\/+/g, "/");
   };
 
   render() {
     const {
-      mode,
-      theme,
       openKeys,
+      theme,
+      mode,
+      location: { pathname },
       className,
       collapsed,
-      location: { pathname },
     } = this.props;
+    // if pathname can't match, use the nearest parent's key
     let selectedKeys = this.getSelectedMenuKeys(pathname);
     if (!selectedKeys.length && openKeys) {
       selectedKeys = [openKeys[openKeys.length - 1]];
     }
-
     let props = {};
     if (openKeys && !collapsed) {
       props = {
         openKeys: openKeys.length === 0 ? [...selectedKeys] : openKeys,
       };
     }
-
     const { handleOpenChange, style, menuData } = this.props;
     const cls = classNames(className, {
-      'top-nav-menu': mode === 'horizontal',
+      "top-nav-menu": mode === "horizontal",
     });
 
     return (
@@ -190,7 +154,6 @@ export default class BaseMenu extends PureComponent {
         key="Menu"
         mode={mode}
         theme={theme}
-        inlineIndent={16}
         onOpenChange={handleOpenChange}
         selectedKeys={selectedKeys}
         style={style}
