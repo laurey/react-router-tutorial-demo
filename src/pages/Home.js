@@ -117,6 +117,22 @@ function Home(props) {
             <li>
               <FancyLink
                 to={{
+                  pathname: "/dashboard",
+                }}
+                name="Dashboard"
+              />
+            </li>
+            <li>
+              <FancyLink
+                to={{
+                  pathname: "/monitor",
+                }}
+                name="Monitor"
+              />
+            </li>
+            <li>
+              <FancyLink
+                to={{
                   pathname: "/exception/401",
                 }}
                 name="Exception401"

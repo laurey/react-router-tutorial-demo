@@ -1,15 +1,14 @@
 import React from "react";
-import BasicLayout from "./layouts/BasicLayout";
+// import BasicLayout from "./layouts/BasicLayout";
 import { BasicLayoutProvider } from "./contexts/useBasicLayoutContext";
 import { AuthProvider } from "./contexts/useAuthContext";
 import "./App.css";
 
-function App() {
+function App(props) {
   return (
     <BasicLayoutProvider>
-      <AuthProvider>
-        <BasicLayout />
-      </AuthProvider>
+      <AuthProvider>{props.children}</AuthProvider>
+      <div>kakaka</div>
     </BasicLayoutProvider>
   );
 }

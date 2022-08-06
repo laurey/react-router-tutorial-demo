@@ -11,12 +11,12 @@ const routes = [
       loading: Loading,
     }),
     // Routes: ["src/pages/Authorized"],
-    Routes: [
-      Loadable({
-        loader: () => import("../pages/Authorized"),
-        loading: Loading,
-      }),
-    ],
+    // Routes: [
+    //   Loadable({
+    //     loader: () => import("../pages/Authorized"),
+    //     loading: Loading,
+    //   }),
+    // ],
     routes: [
       { path: "/demo", redirect: "/demo/workplace" },
       {

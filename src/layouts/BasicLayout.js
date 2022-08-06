@@ -5,8 +5,8 @@ import { Card, Layout, Radio } from "antd";
 import useBasicLayoutContext from "../contexts/useBasicLayoutContext";
 import Footer from "./Footer";
 import HeaderLayout from "./Header";
-import renderRoutes from "../config/renderRoutes";
-import routes from "../config/router.config";
+// import renderRoutes from "../config/renderRoutes";
+// import routes from "../config/router.config";
 import logo from "../assets/logo.png";
 import styles from "./styles.less";
 
@@ -27,7 +27,7 @@ function BasicLayout(props) {
     setCollapsed((state) => !state);
   }, [setCollapsed]);
 
-  console.log("aaa111");
+  console.log("aaaaa");
 
   return (
     <Layout className="rtc-layout rtc-basic-layout">
@@ -64,7 +64,8 @@ function BasicLayout(props) {
                 </div>
               }
             >
-              {/* {renderRoutes(routes)} */}
+              {/* {renderRoutes(routes, props || {})} */}
+              {props.children}
             </Card>
           </div>
         </Content>
