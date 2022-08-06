@@ -1,6 +1,6 @@
 import { join } from "path";
 
-function getPaths({ cwd, config }) {
+function getPaths({ cwd }) {
   return {
     pagesPath: "src/pages",
     absSrcPath: cwd,

@@ -1,6 +1,6 @@
-// import Loadable from "react-loadable";
+import Loadable from "react-loadable";
 
-// import Loading from "../components/Loading";
+import Loading from "../components/Loading";
 
 const routes = [
   {
@@ -11,7 +11,7 @@ const routes = [
     //   loader: () => import("../layouts/DemoLayout"),
     //   loading: Loading,
     // }),
-    Routes: ["src/pages/Authorized"],
+    // Routes: ["src/pages/Authorized"],
     // Routes: [
     //   Loadable({
     //     loader: () => import("../pages/Authorized"),
@@ -25,10 +25,10 @@ const routes = [
         icon: "chrome",
         path: "/demo/workplace",
         component: "./Demo/Workplace",
-        // component: Loadable({
-        //   loader: () => import("../pages/Demo/Workplace"),
-        //   loading: Loading,
-        // }),
+        kkk: Loadable({
+          loader: () => import("../pages/Demo/Workplace"),
+          loading: Loading,
+        }),
       },
       {
         name: "DemoView",

@@ -4,6 +4,7 @@ import { isAbsolute } from "path";
 
 import NotFound from "../NotFound";
 import getRouteConfig from "./getRouteConfig";
+import routesToJSON from "./routesToJSON";
 
 function modifyRoutes(paths, args) {
   const notFoundRoute = {
@@ -33,12 +34,13 @@ function fetchRoutes(paths, config, onPatchRoute) {
 }
 
 function getRoutes(paths, config, onPatchRoute) {
-  return fetchRoutes(paths, config, onPatchRoute);
+  const routes = fetchRoutes(paths, config, onPatchRoute);
+  return routesToJSON(paths, routes);
 }
 
 function getComponents(config, routes) {
   return routes.reduce((aac, route) => {
-    if (_.isString(route.component) && !route.component.startsWith("() =>")) {
+    if (_.isString(route.component)) {
       const component = isAbsolute(route.component)
         ? route.component
         : require.resolve(_.join(config.cwd, route.component));

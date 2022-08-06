@@ -1,84 +1,41 @@
-import { join, relative, isAbsolute } from "path";
+import { relative, isAbsolute, join } from "path";
 import slash from "slash2";
-import { cloneDeep } from "lodash";
+import _ from "lodash";
+// import Loadable from "react-loadable";
+import loadable from "@loadable/component";
+import Loading from "../../components/Loading";
 
-let targetLevel = null;
-let level = 0;
+const OtherComponent = loadable(() => import("../../containers/Demo"), {
+  fallback: <div>Loading...</div>,
+});
 
-const routesToJSON = (routes, service) => {
-  if (process.env.CODE_SPLITTING_LEVEL) {
-    targetLevel = process.env.CODE_SPLITTING_LEVEL;
-  } else {
-    targetLevel = 1;
-    const routesHaveChild = routes.filter(
-      (route) => route.routes && route.routes.length
-    );
-    if (routesHaveChild.length) {
-      targetLevel = 2;
-    }
-  }
+// let targetLevel = null;
+// let level = 0;
 
-  const { applyPlugins, paths } = service;
-  const clonedRoutes = cloneDeep(routes);
-  patchRoutes(clonedRoutes);
+const routesToJSON = (paths, routes) => {
+  // if (process.env.CODE_SPLITTING_LEVEL) {
+  //   targetLevel = process.env.CODE_SPLITTING_LEVEL;
+  // } else {
+  //   targetLevel = 1;
+  //   const routesHaveChild = routes.filter(
+  //     (route) => route.routes && route.routes.length
+  //   );
+  //   if (routesHaveChild.length) {
+  //     targetLevel = 2;
+  //   }
+  // }
 
-  return JSON.stringify(
-    clonedRoutes,
-    (key, value) => {
-      switch (key) {
-        case "component": {
-          if (value.startsWith("() =>")) {
-            return value;
-          }
-
-          const [component, webpackChunkName] = value.split("^^");
-          const importPath = isAbsolute(component)
-            ? component
-            : slash(relative(paths.tmpDirPath, component));
-
-          let ret = `require('${importPath}').default`;
-          if (applyPlugins) {
-            ret = applyPlugins.call(service, "modifyRouteComponent", {
-              initialValue: ret,
-              args: {
-                importPath,
-                webpackChunkName,
-                component,
-              },
-            });
-          }
-
-          return ret;
-        }
-        case "Routes":
-          return `[${value
-            .map(
-              (v) =>
-                `require('${slash(
-                  precedingDot(
-                    relative(paths.absTmpDirPath, join(paths.cwd, v))
-                  )
-                )}').default`
-            )
-            .join(", ")}]`;
-        default:
-          return value;
-      }
-    },
-    2
-  );
+  const clonedRoutes = _.cloneDeep(routes);
+  patchRoutes(paths, clonedRoutes);
+  return clonedRoutes;
 };
 
-function patchRoutes(routes, webpackChunkName) {
-  level += 1;
+function patchRoutes(paths, routes) {
+  // level += 1;
   routes.forEach((route) => {
-    patchRoute(route, webpackChunkName);
+    patchRoute(paths, route);
   });
-  level -= 1;
-}
-
-function precedingDot(p) {
-  return p.startsWith(".") ? p : `./${p}`;
+  // level -= 1;
 }
 
 export function normalizeEntry(entry) {
@@ -89,23 +46,51 @@ export function normalizeEntry(entry) {
     .replace(/\.tsx?$/, "");
 }
 
-function patchRoute(route, webpackChunkName) {
-  if (route.component && !route.component.startsWith("() =>")) {
-    if (!webpackChunkName || level <= targetLevel) {
-      webpackChunkName = normalizeEntry(route.component || "commons_component")
-        .replace(/^src__/, "")
-        .replace(/^pages__/, "p__")
-        .replace(/^page__/, "p__")
-        .replace(/\$/g, "_");
-    }
-    route.component = [
-      route.component || "commons_component",
-      webpackChunkName,
-      route.path,
-    ].join("^^");
+function patchRoute(paths, route) {
+  if (
+    Object.prototype.hasOwnProperty.call(route, "component") &&
+    _.isString(route.component)
+  ) {
+    const importPath = isAbsolute(route.component)
+      ? route.component
+      : join("../../", route.component);
+    // console.log(JSON.stringify(paths));
+    console.log(
+      "imath(route.component) => ",
+      process.cwd(),
+      importPath,
+      route.component
+    );
+    import(`./../../${route.component}`).then((module) => {
+      console.log("ddddd");
+      console.log(module);
+    });
+    Object.assign(route, {
+      ll: Loading,
+      oo: OtherComponent,
+      // component: loadable(() => import(importPath)),
+      component: loadable(() => import(slash(importPath)), {
+        fallback: Loading,
+      }),
+    });
   }
-  if (route.routes) {
-    patchRoutes(route.routes, webpackChunkName);
+
+  if (
+    Object.prototype.hasOwnProperty.call(route, "Routes") &&
+    Array.isArray(route.Routes)
+  ) {
+    Object.assign(route, {
+      Routes: route.Routes.map((data) => {
+        const importPath = isAbsolute(data)
+          ? data
+          : relative(paths.absSrcPath, data);
+        return loadable(() => import(slash(importPath)));
+      }),
+    });
+  }
+
+  if (Array.isArray(route.routes)) {
+    patchRoutes(paths, route.routes);
   }
 }
 
