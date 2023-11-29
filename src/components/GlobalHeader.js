@@ -1,22 +1,22 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Link, useLocation } from 'react-router-dom'
-import { Menu } from 'antd'
+import React from "react";
+import PropTypes from "prop-types";
+import { Link, useLocation } from "react-router-dom";
+import { Menu } from "antd";
 
 function GlobalHeader(props) {
   const {
     isMobile,
-    menusData,
+    menusData = [],
     theme,
     logo,
     collapsed,
     layout: setting,
     onCollapse,
     ...rest
-  } = props
-  const { navHeight } = setting
+  } = props;
+  const { navHeight } = setting;
 
-  const { pathname } = useLocation()
+  const { pathname } = useLocation();
 
   return (
     <div className="rtc-global-header">
@@ -39,24 +39,24 @@ function GlobalHeader(props) {
               <Menu.Item key={route.path.pathname || route.path}>
                 <Link to={route.path}>{route.name}</Link>
               </Menu.Item>
-            )
+            );
           })}
       </Menu>
     </div>
-  )
+  );
 }
 
 GlobalHeader.propTypes = {
   theme: PropTypes.string,
   isMobile: PropTypes.bool,
   collapsed: PropTypes.bool,
-  menusData: PropTypes.array
-}
+  menusData: PropTypes.array,
+};
 
 GlobalHeader.defaultProps = {
-  theme: 'dark',
+  theme: "dark",
   isMobile: false,
-  collapsed: false
-}
+  collapsed: false,
+};
 
-export default GlobalHeader
+export default GlobalHeader;

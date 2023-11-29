@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Layout } from "antd";
 
-import Header from "./Header";
+import TopHeader from "../components/TopHeader";
 import Footer from "./Footer";
 import styles from "./styles.less";
 import logo from "../assets/logo.png";
@@ -11,15 +11,6 @@ const { Content } = Layout;
 class UserLayout extends Component {
   componentDidMount() {
     this.triggerResizeEvent();
-
-    // const {
-    //   dispatch,
-    //   route: { routes, authority },
-    // } = this.props;
-    // dispatch({
-    //   type: "menu/getMenuData",
-    //   payload: { routes, authority },
-    // });
   }
 
   componentWillUnmount() {
@@ -62,11 +53,13 @@ class UserLayout extends Component {
     return (
       <div className="demo-layout-container">
         <Layout>
-          <Header
+          <TopHeader
             logo={logo}
+            layout={{ navHeight: 64 }}
             menuData={menuData}
             isMobile={isMobile}
             hasSiderMenu={false}
+            mode="horizontal"
             handleMenuCollapse={this.handleMenuCollapse}
             {...this.props}
           />

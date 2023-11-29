@@ -25,7 +25,7 @@ function BasicLayout(props) {
     setCollapsed((state) => !state);
   }, [setCollapsed]);
 
-  console.log("aaaaa");
+  console.log("aaaaa", props?.menuData);
 
   return (
     <Layout className="rtc-layout rtc-basic-layout">

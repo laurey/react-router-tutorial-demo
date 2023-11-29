@@ -133,7 +133,6 @@ function wrapWithInitialProps(WrappedComponent, initialProps, extraProps = {}) {
 }
 
 function renderRoutes(routes, extraProps = {}, switchProps = {}) {
-  console.log("1111");
   return Array.isArray(routes) ? (
     <Switch {...switchProps}>
       {routes.map((route, i) => {

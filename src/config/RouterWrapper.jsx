@@ -1,4 +1,3 @@
-import { join, resolve, isAbsolute } from "path";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import LocaleWrapper from "./LocaleWrapper";
@@ -9,9 +8,6 @@ import getRoutes from "../config/routes/getRoutes";
 import getPaths from "./getPaths";
 
 const cwd = __dirname || process.cwd();
-// console.log("__dirme => ", cwd, __dirname, process.cwd());
-// console.log(resolve(cwd, "src"), resolve(cwd, "src"));
-// console.log(join(cwd, "src"), join(cwd, "src"));
 
 const routes = getRoutes(
   getPaths({
@@ -38,6 +34,8 @@ export default class RouterWrapper extends React.Component {
 
   render() {
     const props = this.props || {};
+
+    console.log(routes);
     return (
       <LocaleWrapper>
         <BrowserRouter>{renderRoutes(routes, props)}</BrowserRouter>

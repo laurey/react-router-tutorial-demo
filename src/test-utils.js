@@ -1,26 +1,23 @@
 // test-utils.js
 import React from "react";
+import { Router } from "react-router-dom";
+import { createMemoryHistory } from "history";
 import { render as rtlRender } from "@testing-library/react";
-import { createStore } from "redux";
-import { Provider } from "react-redux";
-// Import your own reducer
-import rootReducers from "./reducers";
 
-function render(
+function renderWithRouter(
   ui,
   {
-    initialState,
-    store = createStore(rootReducers, initialState),
-    ...renderOptions
+    route = "/",
+    history = createMemoryHistory({ initialEntries: [route] }),
   } = {}
 ) {
-  function Wrapper({ children }) {
-    return <Provider store={store}>{children}</Provider>;
-  }
-  return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
+  return {
+    ...rtlRender(<Router history={history}>{ui}</Router>),
+    history,
+  };
 }
 
 // re-export everything
 export * from "@testing-library/react";
 // override render method
-export { render, rtlRender };
+export { renderWithRouter };
